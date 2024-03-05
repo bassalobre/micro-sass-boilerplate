@@ -1,4 +1,5 @@
 import { unstable_noStore as noStore } from 'next/cache';
+import {auth} from "@/services/auth";
 
 const fetchDollarNow = async () => {
     noStore();
@@ -16,9 +17,11 @@ const fetchBitcoinNow = async () => {
 
 export default async function Dashboard() {
     const [dollar, bitcoin] = await Promise.all([fetchDollarNow(), fetchBitcoinNow()]);
+    const session = await auth()
 
     return (
         <div className="flex flex-row gap-2">
+            <pre className="w-1/2">{JSON.stringify(session?.user, undefined, 1)}</pre>
             <pre className="w-1/2">{JSON.stringify(dollar, undefined, 1)}</pre>
             <pre className="w-1/2">{JSON.stringify(bitcoin, undefined, 1)}</pre>
         </div>
