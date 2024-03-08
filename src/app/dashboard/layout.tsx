@@ -4,13 +4,28 @@ import {
   SidebarContent,
   SidebarHeader,
   SidebarItem,
-  SidebarItemBadge,
   SidebarItemIcon,
   SidebarItemTitle,
 } from '@/components/dashboard/sidebar'
-import Header from '@/components/dashboard/header'
-import { HomeIcon, Package2Icon, UsersIcon } from '@/components/icons'
+import { Header, HeaderActions } from '@/components/dashboard/header'
+import {
+  BellIcon,
+  HomeIcon,
+  Package2Icon,
+  SettingsIcon,
+  UsersIcon,
+} from '@/components/icons'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { signOut } from '@/services/auth'
 
 export default function DashboardLayout({
   children,
@@ -26,7 +41,7 @@ export default function DashboardLayout({
             href="/dashboard"
           >
             <Package2Icon className="h-6 w-6" />
-            <span>Acme Inc</span>
+            <span>{"Bassalobres' Company"}</span>
           </Link>
         </SidebarHeader>
         <SidebarContent>
@@ -37,12 +52,43 @@ export default function DashboardLayout({
           <SidebarItem href="/dashboard/customers">
             <SidebarItemIcon icon={UsersIcon} />
             <SidebarItemTitle title="Customers" />
-            <SidebarItemBadge value={5} />
           </SidebarItem>
         </SidebarContent>
       </Sidebar>
       <div className="flex-1 flex flex-col">
-        <Header />
+        <Header>
+          <HeaderActions>
+            <Button className="h-8 w-8" size="icon" variant="outline">
+              <BellIcon className="h-4 w-4" />
+              <span className="sr-only">Toggle notifications</span>
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button className="w-8 h-8" size="icon" variant="outline">
+                  <SettingsIcon className="h-4 w-4" />
+                  <span className="sr-only">Toggle user menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <DropdownMenuItem>Support</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <form
+                  action={async () => {
+                    'use server'
+                    await signOut()
+                  }}
+                >
+                  <DropdownMenuItem>
+                    <button>Logout</button>
+                  </DropdownMenuItem>
+                </form>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </HeaderActions>
+        </Header>
         <main className="flex-1 flex flex-col gap-4 p-4 md:gap-8 md:p-6">
           {children}
         </main>
