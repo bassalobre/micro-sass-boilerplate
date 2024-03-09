@@ -18,9 +18,10 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ### TODO list:
 
-- [] Split and refactor landing page components
-- [] Split and refactor login page
-- [] Add a design for loading pages
-- [] Add a design for error pages
-- [] Add a design for not found pages
-- [] Add login by some social medias
+- [x] Split and refactor landing page components
+- [ ] Split and refactor login page
+- [ ] Add a design for loading pages
+- [ ] Add a design for error pages
+- [ ] Add a design for not found pages
+- [ ] Add support for dark mode
+- [ ] Add login by some social medias
