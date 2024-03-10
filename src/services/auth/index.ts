@@ -2,6 +2,9 @@ import NextAuth from 'next-auth'
 import EmailProvider from '@auth/core/providers/email'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import { prisma } from '@/services/database'
+import Credentials from '@auth/core/providers/credentials'
+import GoogleProvider from '@auth/core/providers/google'
+import { authorizeByCredentials } from '@/services/auth/credentials-method'
 
 export const {
   handlers: { GET, POST },
@@ -28,6 +31,11 @@ export const {
         },
       },
       from: process.env.EMAIL_FROM,
+    }),
+    Credentials({ authorize: authorizeByCredentials }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
 })

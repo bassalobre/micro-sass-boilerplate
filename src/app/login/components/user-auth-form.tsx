@@ -1,22 +1,17 @@
 'use client'
 
-import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { GitHub } from '@/components/icons'
-import { login } from '@/app/login/actions'
+import { CredentialsMethod } from '@/app/login/components/credentials-method'
+import { googleLogin } from '@/app/login/actions'
 import { toast } from '@/components/ui/use-toast'
+import { redirect } from 'next/navigation'
 
 export function UserAuthForm() {
-  const handleSubmit = async (data: FormData) => {
-    const response = await login(data)
+  const handleSubmit = async () => {
+    const response = await googleLogin()
 
     if (response.success) {
-      toast({
-        title: 'Magic link sent',
-        description:
-          'Check your email for a magic link to authenticate your account',
-      })
+      redirect(response.message || '/login')
     } else {
       toast({
         title: 'Error',
@@ -27,26 +22,7 @@ export function UserAuthForm() {
 
   return (
     <div className="grid gap-6">
-      <form action={handleSubmit}>
-        <div className="grid gap-2">
-          <div className="grid gap-1">
-            <Label className="sr-only" htmlFor="email">
-              Email
-            </Label>
-            <Input
-              id="email"
-              name="email"
-              placeholder="name@example.com"
-              type="email"
-              autoCapitalize="none"
-              autoComplete="email"
-              autoCorrect="off"
-              required
-            />
-          </div>
-          <Button type="submit">Send Magic Link</Button>
-        </div>
-      </form>
+      <CredentialsMethod />
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
@@ -57,15 +33,11 @@ export function UserAuthForm() {
           </span>
         </div>
       </div>
-      <Button variant="outline" type="button">
-        <GitHub
-          className="mr-2 h-4 w-4"
-          width={16}
-          height={16}
-          viewBox="0 0 24 24"
-        />
-        GitHub
-      </Button>
+      <form className="mx-auto" action={handleSubmit}>
+        <Button variant="outline" type="submit">
+          Google
+        </Button>
+      </form>
     </div>
   )
 }
